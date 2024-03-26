@@ -1,27 +1,52 @@
 import nltk
 
-nltk.download("punkt")
+nltk.download("punkt", quiet=True)
 from nltk.tokenize import word_tokenize, sent_tokenize
 
-txt = input("Please, Enter the Text : ")
-print(
-    "\n Options : \n 1-print tokenized words \n 2-print tokenized sentences \n 3-print output using split function."
-)
-choice = int(input("\nEnter Your Choice : "))
 
-while choice < 1 or choice > 3:
-    print("\nPlease choose a valid option")
-    choice = int(input("Enter Your Choice : "))
+def get_user_text():
+    """Prompts the user for text input."""
+    return input("Please enter the text: ")
 
 
-if choice == 1:
-    tokenized_words = word_tokenize(txt)
-    print(tokenized_words)
-elif choice == 2:
-    tokenized_sentences = sent_tokenize(txt)
-    print(tokenized_sentences)
+def display_menu():
+    """Prints the menu options for tokenization."""
+    print("\nOptions:")
+    print("1. Print tokenized words")
+    print("2. Print tokenized sentences")
+    print("3. Print output using split function")
+
+
+def get_user_choice():
+    """Gets a valid choice from the user (1-3)."""
+    while True:
+        try:
+            choice = int(input("\nEnter your choice: "))
+            if 1 <= choice <= 3:
+                return choice
+            else:
+                print("\nInvalid choice. Please enter a number between 1 and 3.")
+        except ValueError:
+            print("\nInvalid input. Please enter a number.")
+
+
+def tokenize_text(text, choice):
+    """Tokenizes the text based on user choice."""
+    if choice == 1:
+        return word_tokenize(text)
+    elif choice == 2:
+        return sent_tokenize(text)
+    else:
+        return text.split(), text.split(".")  # Return both words and sentences
+
+
+text = get_user_text()
+display_menu()
+choice = get_user_choice()
+
+results = tokenize_text(text, choice)
+if isinstance(results, tuple):  # Check if both words and sentences are returned
+    print(f"words = {results[0]}")
+    print(f"sentences = {results[1]}")
 else:
-    words = txt.split(" ")
-    sentences = txt.split(".")
-    print(f"words = {words}")
-    print(f"sentences = {sentences}")
+    print(results)
